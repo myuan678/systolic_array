@@ -1,0 +1,1 @@
+export TCLLIBPATH="/home/liuyunqi/tree/flexfile/tcl /usr/share/tcltk/tcllib1.20"
