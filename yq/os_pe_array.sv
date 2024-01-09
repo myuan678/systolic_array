@@ -11,13 +11,19 @@ module os_pe_array #(
     input                               rst_n                           ,
 
     // data in
-    input           [ROW_NUM-1:0]       v_din_row_en                    ,
-    input           [DAT_WIDTH-1:0]     v_din_row       [ROW_NUM-1:0]   ,
-    input           [DAT_WIDTH-1:0]     v_din_col       [ROW_NUM-1:0]   , 
+    input  logic    [ROW_NUM-1:0]       v_din_row_en                    ,
+    input  logic    [DAT_WIDTH-1:0]     v_din_row       [ROW_NUM-1:0]   ,
+    input  logic    [DAT_WIDTH-1:0]     v_din_col       [ROW_NUM-1:0]   , 
+    output logic    [DAT_WIDTH-1:0]     v_shift_dat_out [ROW_NUM-1:0]   ,
 
-    input                               load_en                         ,
-    input                               shift_en                        ,
-    output logic    [ACC_WIDTH-1:0]     v_shift_dat_out [ROW_NUM-1:0]
+    input  logic                        load_en                         ,
+    input  logic                        shift_en                        ,
+
+    // data out
+    input  logic    [DAT_WIDTH-1:0]     v_shift_dat_in  [ROW_NUM-1:0]   ,
+    output logic    [ROW_NUM-1:0]       v_dout_row_en                   ,
+    output logic    [DAT_WIDTH-1:0]     v_dout_row       [ROW_NUM-1:0]  ,
+    output logic    [DAT_WIDTH-1:0]     v_dout_col       [ROW_NUM-1:0]   
 );
 
     logic                     vv_dat_h_en   [ROW_NUM:0][COL_NUM:0];
@@ -28,12 +34,16 @@ module os_pe_array #(
     generate for(genvar row=0 ; row<ROW_NUM ; row=row+1) begin
         assign vv_dat_h_en[row][0]      = v_din_row_en[row]             ; 
         assign vv_dat_h[row][0]         = v_din_row[row]                ;
-        assign v_shift_dat_out[row]     = vv_shift_dat[row][COL_NUM]    ;
-        assign vv_shift_dat[row][0]     = {ACC_WIDTH{1'b0}}             ;
+        assign v_shift_dat_out[row]     = vv_shift_dat[row][COL_NUM+1][ACC_WIDTH-1:ACC_WIDTH-DAT_WIDTH]    ;
+        assign vv_shift_dat[row][0]     = v_shift_dat_in[row]           ;
+
+        assign v_dout_row[row]          = vv_dat_h[row][COL_NUM+1]      ;
     end endgenerate
 
     generate for(genvar col=0 ; col<COL_NUM ; col=col+1) begin
         assign vv_dat_v[0][col]         = v_din_col[col]                ;
+
+        assign v_dout_col[col]          = vv_dat_v[col][ROW_NUM+1]      ;
     end endgenerate
 
 
