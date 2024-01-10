@@ -15,7 +15,7 @@ module toy_vec_mtx
     input  logic [V_OPC_WIDTH-1:0]      valu_opcode         ,
     input  logic [V_REG_IDX_WIDTH-1:0]  valu_vs1            ,
     input  logic [V_REG_IDX_WIDTH-1:0]  valu_vs2            ,
-    input  logic [4:0]                  valu_rd             ,
+    input  logic [V_REG_IDX_WIDTH-1:0]  valu_rd             ,
 
     input  logic                        vlsu_op_en          ,
     input  logic [V_OPC_WIDTH-1:0]      vlsu_opcode         ,

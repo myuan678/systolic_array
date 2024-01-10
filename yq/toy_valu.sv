@@ -23,4 +23,7 @@ module toy_valu
 
 );
 
+
+    //res = (x > 0) ? x : 0;
+
 endmodule
